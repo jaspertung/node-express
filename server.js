@@ -7,6 +7,7 @@
 
 const express = require('express') //not a core module, but express was installed to node_modules
 const morgan = require('morgan')
+const campsiteRouter = require('./routes/campsiteRouter')
 
 const hostname = 'localhost'
 const port = 3000
@@ -15,56 +16,30 @@ const app = express() //call express function which returns server application n
 app.use(morgan('dev')) //use development version of morgan for more info
 app.use(express.json()) // when server receives requests with JSON formatted data in body, middleware function will parse into JS properties of request object to use data in JS
 
-//support for REST API endpoints
-app.all('/campsites', (req, res, next) => {//routing method for all HTTP methods to create default, so any HTTP requests to this path will trigger this method
-    res.statusCode = 200
-    res.setHeader('Content-Type', 'text/plain')
-    next() //pass control of applicaiton routing to the next relevant routing method (ex. if post request, skips get method)
-}) 
+app.use('/campsites', campsiteRouter) //specify root path here, not in campsiteRouter.js
 
-//-----------handle GET request for campsites path
-app.get('/campsites', (req, res) => { //don't need to set res statusCode and setHeader because already in app.all
-    res.end('Will send all the campsites to you')
-})
+// //------GET route parameter to end of path
+// app.get('/campsites/:campsiteId', (req, res) => { //store campsiteId value as route param named campsiteId
+//     res.end(`Will send details of the campsite: ${req.params.campsiteId} to you`)
+// }) 
 
-//-----------handle POST request for campsites path
-app.post('/campsites', (req, res) => {
-    res.end(`Will add the campsites: ${req.body.name} with description: ${req.body.description}`) // assume data is JSON so need to parse with express.json()
-})
+// //------POST route parameter
+// app.post('/campsites/:campsiteId', (req, res) => { 
+//     res.statusCode = 403
+//     res.end(`POST operation not supported on /campsites/${req.params.campsiteId}`)
+// }) 
 
-//------------handle PUT requests for campsitse path
-app.put('/campsites', (req, res) => {
-    res.statusCode = 403
-    res.end('PUT operation not supported on /campsites')
-}) 
+// //------PUT route parameter
+// app.put('/campsites/:campsiteId', (req, res) => { 
+//     res.write(`Updating the campsite: ${req.params.campsiteId}\n`)
+//     res.end(`Will update the campsite: ${req.body.name} 
+//         with description: ${req.body.description}`) //sent as JSON formatted response of request message, then echoing back in response as text
+// }) 
 
-//------------handle DELETE requests for campsite path
-app.delete('/campsites', (req, res) => {
-    res.end('Deleting all campsites')
-}) 
-
-//------GET route parameter to end of path
-app.get('/campsites/:campsiteId', (req, res) => { //store campsiteId value as route param named campsiteId
-    res.end(`Will send details of the campsite: ${req.params.campsiteId} to you`)
-}) 
-
-//------POST route parameter
-app.post('/campsites/:campsiteId', (req, res) => { 
-    res.statusCode = 403
-    res.end(`POST operation not supported on /campsites/${req.params.campsiteId}`)
-}) 
-
-//------PUT route parameter
-app.put('/campsites/:campsiteId', (req, res) => { 
-    res.write(`Updating the campsite: ${req.params.campsiteId}\n`)
-    res.end(`Will update the campsite: ${req.body.name} 
-        with description: ${req.body.description}`) //sent as JSON formatted response of request message, then echoing back in response as text
-}) 
-
-//------DELETE route parameter
-app.delete('/campsites/:campsiteId', (req, res) => {
-    res.end(`Deleting campsite: ${req.params.campsiteId}`) //deleting specific campsite, not all of them
-}) 
+// //------DELETE route parameter
+// app.delete('/campsites/:campsiteId', (req, res) => {
+//     res.end(`Deleting campsite: ${req.params.campsiteId}`) //deleting specific campsite, not all of them
+// }) 
 
 //set up express to serve files from public folder (for static)
 app.use(express.static(__dirname + '/public'))
