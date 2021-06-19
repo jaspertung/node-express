@@ -8,6 +8,8 @@
 const express = require('express') //not a core module, but express was installed to node_modules
 const morgan = require('morgan')
 const campsiteRouter = require('./routes/campsiteRouter')
+const promotionRouter = require('./routes/promotionRouter')
+const partnerRouter = require('./routes/partnerRouter')
 
 const hostname = 'localhost'
 const port = 3000
@@ -17,6 +19,8 @@ app.use(morgan('dev')) //use development version of morgan for more info
 app.use(express.json()) // when server receives requests with JSON formatted data in body, middleware function will parse into JS properties of request object to use data in JS
 
 app.use('/campsites', campsiteRouter) //specify root path here, not in campsiteRouter.js
+app.use('/promotions', promotionRouter)
+app.use('/partners', partnerRouter)
 
 //set up express to serve files from public folder (for static)
 app.use(express.static(__dirname + '/public'))
