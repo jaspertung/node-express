@@ -23,32 +23,28 @@ campsiteRouter.route('/') //path of just /, not campsites (in server.js)
     res.end('Deleting all campsites')
 })
 
-module.exports = campsiteRouter
-
-/*//support for REST API endpoints -----------previous version before adding express router and chaining all the methods-------------
-app.all('/campsites', (req, res, next) => {//routing method for all HTTP methods to create default, so any HTTP requests to this path will trigger this method
+campsiteRouter.route('/:campsiteId')
+//single chained statement that handles all route parameters for campsiteId
+.all((req, res, next) => {
     res.statusCode = 200
     res.setHeader('Content-Type', 'text/plain')
-    next() //pass control of applicaiton routing to the next relevant routing method (ex. if post request, skips get method)
+    next()
 }) 
-
-//-----------handle GET request for campsites path
-app.get('/campsites', (req, res) => { //don't need to set res statusCode and setHeader because already in app.all
-    res.end('Will send all the campsites to you')
-})
-
-//-----------handle POST request for campsites path
-app.post('/campsites', (req, res) => {
-    res.end(`Will add the campsites: ${req.body.name} with description: ${req.body.description}`) // assume data is JSON so need to parse with express.json()
-})
-
-//------------handle PUT requests for campsitse path
-app.put('/campsites', (req, res) => {
+.get((req, res) => { //store campsiteId value as route param named campsiteId
+    res.end(`Will send details of the campsite: ${req.params.campsiteId} to you`)
+}) 
+.post((req, res) => { 
     res.statusCode = 403
-    res.end('PUT operation not supported on /campsites')
+    res.end(`POST operation not supported on /campsites/${req.params.campsiteId}`)
+}) 
+.put((req, res) => { 
+    res.write(`Updating the campsite: ${req.params.campsiteId}\n`)
+    res.end(`Will update the campsite: ${req.body.name} 
+        with description: ${req.body.description}`) //sent as JSON formatted response of request message, then echoing back in response as text
+}) 
+.delete((req, res) => {
+    res.end(`Deleting campsite: ${req.params.campsiteId}`) //deleting specific campsite, not all of them
 }) 
 
-//------------handle DELETE requests for campsite path
-app.delete('/campsites', (req, res) => {
-    res.end('Deleting all campsites')
-})*/ 
+module.exports = campsiteRouter
+

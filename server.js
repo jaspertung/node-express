@@ -18,29 +18,6 @@ app.use(express.json()) // when server receives requests with JSON formatted dat
 
 app.use('/campsites', campsiteRouter) //specify root path here, not in campsiteRouter.js
 
-// //------GET route parameter to end of path
-// app.get('/campsites/:campsiteId', (req, res) => { //store campsiteId value as route param named campsiteId
-//     res.end(`Will send details of the campsite: ${req.params.campsiteId} to you`)
-// }) 
-
-// //------POST route parameter
-// app.post('/campsites/:campsiteId', (req, res) => { 
-//     res.statusCode = 403
-//     res.end(`POST operation not supported on /campsites/${req.params.campsiteId}`)
-// }) 
-
-// //------PUT route parameter
-// app.put('/campsites/:campsiteId', (req, res) => { 
-//     res.write(`Updating the campsite: ${req.params.campsiteId}\n`)
-//     res.end(`Will update the campsite: ${req.body.name} 
-//         with description: ${req.body.description}`) //sent as JSON formatted response of request message, then echoing back in response as text
-// }) 
-
-// //------DELETE route parameter
-// app.delete('/campsites/:campsiteId', (req, res) => {
-//     res.end(`Deleting campsite: ${req.params.campsiteId}`) //deleting specific campsite, not all of them
-// }) 
-
 //set up express to serve files from public folder (for static)
 app.use(express.static(__dirname + '/public'))
 // __dirname: special variable in Node that refers to absolute path of the current directory it's in
